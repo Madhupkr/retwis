@@ -1,7 +1,7 @@
 import redis
 
 from datetime import datetime
-from flask import (g, jsonify, request, render_template,
+from flask import (g, request, render_template,
                    session, redirect, url_for)
 
 from retwis import app
