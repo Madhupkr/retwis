@@ -11,4 +11,28 @@ This is totally python3 compatible
 
     python runserver.py
 
-And then hit http://localhost:5000 to access the app
+# Testing
+
+    pip install pytest
+    py.test
+
+
+~ What is Retwis?
+
+A redis powered flask post tweeting application
+
+~ How do I use it?
+
+1. change the settings in the settings.py file to your own
+   and start using it.
+
+2. run retwis
+
+    flask run
+
+the application will greet you on
+     http://localhost:5000/
+
+~ Is it tested?
+
+Run `py.test` to see the results.
