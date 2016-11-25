@@ -13,6 +13,7 @@ import os
 import tempfile
 import pytest
 from retwis import app
+from retwis.views import init_db
 
 
 @pytest.fixture
@@ -45,29 +46,29 @@ def logout(client):
 def test_empty_db(client):
     """Start with a blank database."""
     rv = client.get('/')
-    assert b'No entries here so far' in rv.data
+    assert b'Login' in rv.data
 
 
 def test_login_logout(client):
     """Make sure login and logout works"""
-    rv = login(client, app.config['USERNAME'],
-               app.config['PASSWORD'])
+    rv = login(client, app.config['username'],
+               app.config['password'])
     assert b'You were logged in' in rv.data
     rv = logout(client)
     assert b'You were logged out' in rv.data
-    rv = login(client, app.config['USERNAME'] + 'x',
-               app.config['PASSWORD'])
+    rv = login(client, app.config['username'] + 'x',
+               app.config['password'])
     assert b'Invalid username' in rv.data
-    rv = login(client, app.config['USERNAME'],
-               app.config['PASSWORD'] + 'x')
+    rv = login(client, app.config['username'],
+               app.config['password'] + 'x')
     assert b'Invalid password' in rv.data
 
 
 def test_messages(client):
     """Test that messages work"""
-    login(client, app.config['USERNAME'],
-          app.config['PASSWORD'])
-    rv = client.post('/add', data=dict(
+    login(client, app.config['username'],
+          app.config['password'])
+    rv = client.post('/home', data=dict(
         title='<Hello>',
         text='<strong>HTML</strong> allowed here'
     ), follow_redirects=True)
