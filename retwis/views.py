@@ -1,9 +1,12 @@
-import redis
-
+# import from stdlib
 from datetime import datetime
+
+# import third party modules
 from flask import (g, request, render_template,
                    session, redirect, url_for)
+import redis
 
+# import self modules
 from retwis import app
 
 
