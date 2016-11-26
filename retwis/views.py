@@ -42,13 +42,10 @@ def login():
     username = request.form['username']
     password = request.form['password']
     user_id = str(g.db.hget('users', username), 'utf-8')
-    print("user id", user_id)
     if not user_id:
         error = 'No such user'
         return render_template('login.html', error=error)
     saved_password = str(g.db.hget('user:' + str(user_id), 'password'), 'utf-8')
-    print("saved password", saved_password)
-    print("entered password", password)
     if password != saved_password:
         error = 'Incorrect password'
         return render_template('login.html', error=error)
@@ -64,13 +61,9 @@ def logout():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    print("inside home")
     if not session:
         return redirect(url_for('login'))
-    print("session is there")
-    print("session", session['username'])
     user_id = g.db.hget('users', session['username'])
-    print("user_id:", user_id)
     if request.method == 'GET':
         return render_template('home.html', timeline=_get_timeline(user_id))
     text = request.form['tweet']
@@ -85,15 +78,11 @@ def home():
 
 def _get_timeline(user_id):
     posts = g.db.lrange('timeline:' + str(user_id), 0, -1)
-    print("posts", posts)
     timeline = []
     for post_id in posts:
         post = g.db.hgetall('post:' + str(post_id, 'utf-8'))
-        print("post", post)
-        print('user:' + str(post[b'user_id']))
         timeline.append(dict(
             username=g.db.hget('user:' + str(post[b'user_id'], 'utf-8'), 'username'),
             ts=post[b'ts'],
             text=post[b'text']))
-    print("timeline:", timeline)
     return timeline
